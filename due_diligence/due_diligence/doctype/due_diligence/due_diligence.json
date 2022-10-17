@@ -1,0 +1,183 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "Due Diligence-.#####",
+ "creation": "2022-09-17 14:23:36.732196",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "quotation_details_section",
+  "quotation",
+  "data_1",
+  "column_break_8",
+  "diligence_status",
+  "email_details_section",
+  "sender",
+  "sender_email",
+  "send_to",
+  "column_break_7",
+  "description",
+  "acceptance_and_decline_details_section",
+  "accepted_date",
+  "accepted_name",
+  "url",
+  "url_expiry_date",
+  "created_by",
+  "assigned_to",
+  "column_break_16",
+  "decline_date",
+  "decline_reason",
+  "date_created",
+  "date_modified"
+ ],
+ "fields": [
+  {
+   "fetch_from": "quotation.customer_name",
+   "fieldname": "data_1",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Customer Name"
+  },
+  {
+   "fieldname": "quotation",
+   "fieldtype": "Link",
+   "label": "Quotation",
+   "options": "Quotation",
+   "reqd": 1
+  },
+  {
+   "fieldname": "sender",
+   "fieldtype": "Link",
+   "label": "Sender",
+   "options": "User"
+  },
+  {
+   "fieldname": "accepted_date",
+   "fieldtype": "Datetime",
+   "label": "Accepted Date"
+  },
+  {
+   "fieldname": "decline_date",
+   "fieldtype": "Datetime",
+   "label": "Decline Date"
+  },
+  {
+   "fieldname": "url",
+   "fieldtype": "Data",
+   "label": "URL"
+  },
+  {
+   "fieldname": "created_by",
+   "fieldtype": "Data",
+   "label": "Created By"
+  },
+  {
+   "fieldname": "column_break_8",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Sent",
+   "fieldname": "diligence_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Diligence Status",
+   "options": "Accepted Digitally\nDeclined\nSent\nDraft\nAwaiting Partner Review\nPartner Review Completed\nViewed\nAccepted"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "send_to",
+   "fieldtype": "Data",
+   "label": "Send To "
+  },
+  {
+   "fieldname": "assigned_to",
+   "fieldtype": "Data",
+   "label": "Assigned To "
+  },
+  {
+   "fieldname": "accepted_name",
+   "fieldtype": "Data",
+   "label": "Accepted Name"
+  },
+  {
+   "fieldname": "decline_reason",
+   "fieldtype": "Small Text",
+   "label": "Decline Reason"
+  },
+  {
+   "fieldname": "url_expiry_date",
+   "fieldtype": "Date",
+   "label": "URL Expiry Date"
+  },
+  {
+   "fieldname": "date_created",
+   "fieldtype": "Datetime",
+   "label": "Date Created"
+  },
+  {
+   "fieldname": "date_modified",
+   "fieldtype": "Datetime",
+   "label": "Date Modified"
+  },
+  {
+   "fetch_from": "sender.email",
+   "fieldname": "sender_email",
+   "fieldtype": "Data",
+   "label": "Sender Email"
+  },
+  {
+   "fieldname": "quotation_details_section",
+   "fieldtype": "Section Break",
+   "label": "Quotation Details"
+  },
+  {
+   "fieldname": "email_details_section",
+   "fieldtype": "Section Break",
+   "label": "Email Details"
+  },
+  {
+   "fieldname": "column_break_7",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "acceptance_and_decline_details_section",
+   "fieldtype": "Section Break",
+   "label": "Acceptance and Decline Details"
+  },
+  {
+   "fieldname": "column_break_16",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2022-10-13 17:29:41.214529",
+ "modified_by": "Administrator",
+ "module": "Due Diligence",
+ "name": "Due Diligence",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1,
+ "track_seen": 1,
+ "track_views": 1
+}
