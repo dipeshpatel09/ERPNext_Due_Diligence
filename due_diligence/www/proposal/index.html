@@ -1,0 +1,50 @@
+<!-- <h1>Proposal Signing<h1> -->
+{% extends "templates/web.html" %}
+
+{% block script %}
+<script src="assets/js/moment-bundle.min.js"></script>
+<script src="proposal/index.js"></script>
+{% endblock %}
+
+{% block page_content %}
+<div class="container">
+    <div>
+        <div class="text-center mt-5">
+            <h3>Proposal Signing</h3>
+        </div>
+        <div class="row justify-content-center mt-3">
+            <div class="col-md-12 align-self-center ">
+                <div class="row">
+                    <iframe id="viewPDF" src="" width="1200" height="600"></iframe> 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="enter-details" class="mb-5">
+    <div class="row justify-content-center mt-3">
+        <div class="col-md-10 align-items-center">
+            <form id="due_diligence" name="due_diligence">
+                <div id="accept" style="margin: 10px 0;">
+                    <input class="form-control mt-3" type="checkbox" name="acceptance" id="acceptance" style="display: inline-block;">
+                    <label for="acceptance"> I have read and agree with terms and conditions</label>
+                </div>
+            <input class="form-control mt-3" type="text" name="accept_or_decline_by" id="accept_or_decline_by" placeholder="Type your name here" autocomplete="off" style="padding: 5px 0;">
+            </form>
+            <div class="row mt-3" id="submit-button-area">
+                <div class="col-md mt-3">
+                    <button class="btn btn-dark form-control" type="submit" id="on_acceptance" name="on_acceptance" onclick="return validateForm();"><b>I agree and accept the terms</b></button>
+                </div>
+            </div> 
+            <div class="row mt-3" id="submit-button-area"> 
+                <div class="col-md mt-3">
+                    <button class="btn btn-primary form-control" id="submit-button" onclick="return redirect();"><b>I dont accept the terms</b></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include due_diligence *.css
+recursive-include due_diligence *.csv
+recursive-include due_diligence *.html
+recursive-include due_diligence *.ico
+recursive-include due_diligence *.js
+recursive-include due_diligence *.json
+recursive-include due_diligence *.md
+recursive-include due_diligence *.png
+recursive-include due_diligence *.py
+recursive-include due_diligence *.svg
+recursive-include due_diligence *.txt
+recursive-exclude due_diligence *.pyc

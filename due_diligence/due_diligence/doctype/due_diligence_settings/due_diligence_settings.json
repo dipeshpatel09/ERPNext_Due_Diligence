@@ -1,0 +1,67 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2022-10-04 11:54:47.331969",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "email_template_section",
+  "accepted_email_template",
+  "decline_email_template",
+  "email_cc",
+  "url_expiry_days"
+ ],
+ "fields": [
+  {
+   "fieldname": "email_template_section",
+   "fieldtype": "Section Break",
+   "label": "Email Template "
+  },
+  {
+   "fieldname": "accepted_email_template",
+   "fieldtype": "Link",
+   "label": "Accepted Email Template",
+   "options": "Email Template"
+  },
+  {
+   "fieldname": "decline_email_template",
+   "fieldtype": "Link",
+   "label": "Decline Email Template ",
+   "options": "Email Template"
+  },
+  {
+   "description": "Note: Kindly fill the Email CC field with comma separated values. ",
+   "fieldname": "email_cc",
+   "fieldtype": "Small Text",
+   "label": "Email CC"
+  },
+  {
+   "fieldname": "url_expiry_days",
+   "fieldtype": "Data",
+   "label": "URL Expiry Days"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2022-10-17 10:20:14.169257",
+ "modified_by": "Administrator",
+ "module": "Due Diligence",
+ "name": "Due Diligence Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}

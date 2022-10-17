@@ -1,0 +1,36 @@
+{% extends "templates/web.html" %}
+
+{% block script %}
+<!-- <script src="assets/js/moment-bundle.min.js"></script> -->
+<script src="index.js"></script>
+{% endblock %}
+
+{% block page_content %}
+
+<div id="enter-details" class="mb-5">
+    <div class="row justify-content-center mt-3">
+        <div class="col-md-10 align-items-center">
+            <form>
+                <label for="reason" style="display: block; width: 100%; max-width: 100%;"><b>Reason</b></label>
+                <textarea id="reason" name="reason" rows="4" cols="100"></textarea>
+            </form>
+            <div class="row mt-3" id="submit-button-area"> 
+                <div class="col-md mt-3">
+                    <button class="btn btn-primary form-control" id="submit" onclick="return update_due_diligence_on_decline();">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function preventBack() {
+        window.history.forward(); 
+    }
+      
+    setTimeout("preventBack()", 0);
+      
+    window.onunload = function () { null };
+</script>
+
+{% endblock %}
