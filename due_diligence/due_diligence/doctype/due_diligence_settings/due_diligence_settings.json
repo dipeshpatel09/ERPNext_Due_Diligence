@@ -9,6 +9,7 @@
   "email_template_section",
   "accepted_email_template",
   "decline_email_template",
+  "email_details_section",
   "email_cc",
   "url_expiry_days"
  ],
@@ -16,7 +17,7 @@
   {
    "fieldname": "email_template_section",
    "fieldtype": "Section Break",
-   "label": "Email Template "
+   "label": "Default Email Template "
   },
   {
    "fieldname": "accepted_email_template",
@@ -40,12 +41,17 @@
    "fieldname": "url_expiry_days",
    "fieldtype": "Data",
    "label": "URL Expiry Days"
+  },
+  {
+   "fieldname": "email_details_section",
+   "fieldtype": "Section Break",
+   "label": "Email Details"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2022-10-17 10:20:14.169257",
+ "modified": "2022-10-21 12:17:02.298919",
  "modified_by": "Administrator",
  "module": "Due Diligence",
  "name": "Due Diligence Settings",

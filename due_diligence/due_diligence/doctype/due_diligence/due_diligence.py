@@ -44,10 +44,8 @@ def send_email_due_diligence(send_to, email_template, contact_person, quotation)
         sender =  frappe.session.user,
         subject = email_subject,
         message = email_body,
-        delayed = False
-        # `as_markdown`: Convert content markdown to HTML
-        # `template`: Name of html template (jinja) from templates/emails folder
-        # `args`: Arguments for rendering the template
+        delayed = False,
+        
     )
 
     url = frappe.utils.get_url()
@@ -63,7 +61,6 @@ def create_due_diligence(send_to, email_template, contact_person, quotation):
     
     after_15_days = add_to_date(datetime.now(), days=url_expiry_days, as_string=True)
     
-    # after_15_days = frappe.as_json(after_15_days)
     
     docs = frappe.new_doc("Due Diligence")
     docs.send_to = send_to

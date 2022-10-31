@@ -18,25 +18,17 @@ async function get_quote_content() {
             "name": split_string[1],
         },
         callback: function(response){
-            if(response.message.status == false){
+            if(response.message.status == false && response.message.diligence_status == 'Sent'){
                 window.location.href = response.message.getURL+'/proposal/expire.html';
             } else {
-                if(response.message.status){
+                if(response.message.status == true){
                     $(document).find('#viewPDF').attr('src', response.message.getURL + '#toolbar=0');
                 } else {
                     window.location.href = response.message.getURL+'/proposal/404';
                 }
             }
         }
-        // callback: function(response){
-        //     // console.log(response);
-        //     if(response.message.status){
-        //         $(document).find('#viewPDF').attr('src', response.message.getURL + '#toolbar=0');
-        //         console.log(response.message.getURL);
-        //     } else {
-        //         window.location.href = response.message.getURL+'/proposal/404';
-        //     }
-        // }
+        
     })).message;
     return false;
 }

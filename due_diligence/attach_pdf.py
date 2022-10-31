@@ -91,7 +91,7 @@ def save_and_attach(content, to_doctype, to_name, folder, auto_name=None):
         file_name = "{to_name}.pdf".format(to_name=to_name.replace("/", "-"))
 
     save_file(file_name, content, to_doctype, to_name, folder=folder, is_private=1)
-
+    frappe.msgprint("PDF Created and Attached in Attachments.")
 
 def set_name_from_naming_options(autoname, doc):
     """
