@@ -71,20 +71,20 @@ def send_mail_on_acceptance_or_decline(doctype, name, accept_or_decline_by, acti
         email_subject, email_body = frappe.db.get_value("Email Template", email_template, ["subject", "response"])
         email_body = frappe.render_template(email_body, docAsDict)
         recipients =  frappe.db.get_value("Due Diligence", {'quotation': name},["sender_email"])
-        attachments = ''
-        email_cc = ''
+        attachments = "[]"
+        email_cc = None
         
     result = update_due_diligence(doctype, name, accept_or_decline_by, action, reason)
+    send_email(recipients, email_subject, email_body, attachments, email_cc)
     
-    
-    frappe.sendmail(
-        recipients =  recipients,
-        subject = email_subject,
-        message = email_body,
-        attachments = attachments,
-        cc = email_cc,
-        delayed = False,
-    )
+    # frappe.sendmail(
+    #     recipients =  recipients,
+    #     subject = email_subject,
+    #     message = email_body,
+    #     attachments = attachments,
+    #     cc = email_cc,
+    #     delayed = False,
+    # )
     
     if frappe.session.user == "Guest":
         frappe.msgprint("Email Sent")
@@ -115,3 +115,11 @@ def get_url(doctype, name, accept_or_decline_by):
 
 
 
+def send_email(recipients, email_subject, email_body, attachments, email_cc):
+    make(recipients = recipients,
+         subject = email_subject,
+         content = email_body,
+         attachments = attachments,
+         cc = email_cc,
+         send_email = True
+         )
