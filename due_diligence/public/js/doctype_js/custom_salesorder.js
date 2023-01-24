@@ -1,4 +1,4 @@
-frappe.ui.form.on('Quotation', {
+frappe.ui.form.on('Sales Order', {
     refresh: function (frm) {
         if (frm.doc.docstatus == 1) {
             cur_frm.add_custom_button(__('Send Due Diligence'), function () {
@@ -166,7 +166,7 @@ frappe.ui.form.on('Quotation', {
 
 
 
-frappe.ui.form.on("Quotation", {
+frappe.ui.form.on("Sales Order", {
     onload: function (frm) {
         var fileName = frm.doc.name + '.pdf';
         $('a[title="' + fileName + '"]').removeAttr('href', 'javascript://');
