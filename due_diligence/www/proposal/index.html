@@ -10,7 +10,7 @@
 <div class="container">
     <div>
         <div class="text-center mt-5">
-            <h3>Proposal Signing</h3>
+            <h3 class="text-uppercase fs-3">Sales Order</h3>
         </div>
         <div class="row justify-content-center mt-3">
             <div class="col-md-12 align-self-center ">
@@ -28,18 +28,21 @@
             <form id="due_diligence" name="due_diligence">
                 <div id="accept" style="margin: 10px 0;">
                     <input class="form-control mt-3" type="checkbox" name="acceptance" id="acceptance" style="display: inline-block;">
-                    <label for="acceptance"> I have read and agree with terms and conditions</label>
+                    <label for="acceptance"> I accept the order.</label>
                 </div>
-            <input class="form-control mt-3" type="text" name="accept_or_decline_by" id="accept_or_decline_by" placeholder="Type your name here" autocomplete="off" style="padding: 5px 0;">
+            <div >
+                <input  style=" visibility: hidden" class="form-control mt-3" type="text" name="accept_or_decline_by" id="accept_or_decline_by" placeholder="Type your name here" autocomplete="off" style="padding: 5px 0;">
+            </div>
+          
             </form>
             <div class="row mt-3" id="submit-button-area">
                 <div class="col-md mt-3">
-                    <button class="btn btn-dark form-control" type="submit" id="on_acceptance" name="on_acceptance" onclick="return validateForm();"><b>I agree and accept the terms</b></button>
+                    <button class="btn btn-dark form-control" type="submit" id="on_acceptance" name="on_acceptance" onclick="return validateForm();"><b>Order Dispatched</b></button>
                 </div>
             </div> 
             <div class="row mt-3" id="submit-button-area"> 
                 <div class="col-md mt-3">
-                    <button class="btn btn-primary form-control" id="submit-button" onclick="return redirect();"><b>I dont accept the terms</b></button>
+                    <button class="btn btn-primary form-control" id="submit-button" onclick="return redirect();"><b>Cancel</b></button>
                 </div>
             </div>
         </div>

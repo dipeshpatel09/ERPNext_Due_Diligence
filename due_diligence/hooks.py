@@ -113,23 +113,23 @@ doc_events = {
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-# 	"all": [
-# 		"due_diligence.tasks.all"
-# 	],
-# 	"daily": [
-# 		"due_diligence.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"due_diligence.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"due_diligence.tasks.weekly"
-# 	]
-# 	"monthly": [
-# 		"due_diligence.tasks.monthly"
-# 	]
-# }
+scheduler_events = {
+	# "all": [
+	# 	"due_diligence.tasks.all"
+	# ],
+	"daily": [
+		"due_diligence.due_diligence.doctype.due_diligence.due_diligence.due_diligence_schedule"
+	],
+	# "hourly": [
+	# 	"due_diligence.tasks.hourly"
+	# ],
+	# "weekly": [
+	# 	"due_diligence.tasks.weekly"
+	# ]
+	# "monthly": [
+	# 	"due_diligence.tasks.monthly"
+	# ]
+}
 
 # Testing
 # -------

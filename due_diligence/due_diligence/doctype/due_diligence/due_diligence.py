@@ -10,6 +10,8 @@ from datetime import datetime
 import requests
 from frappe.utils import add_to_date
 from datetime import timedelta, date
+from oxo.oxo.doctype.ts_whatsapp_settings.ts_whatsapp_settings import whatsapp
+import urllib.parse
 
 class DueDiligence(Document):
     pass
@@ -50,7 +52,33 @@ def send_email_due_diligence(send_to, email_template, contact_person, quotation,
 
     url = frappe.utils.get_url()
     return [url, newDocName]
+
+@frappe.whitelist()
+def send_whatsapp_due_diligence(sales_partner, email_template, doctype, docname):
+    newDocName = create_due_diligence(sales_partner, email_template, "", docname, doctype)
     
+    Doc = frappe.get_doc(doctype, docname)
+    docAsDict = Doc.as_dict()
+    
+    email_subject = frappe.db.get_value('Email Template', email_template, 'subject')
+    email_body = frappe.db.get_value('Email Template', email_template, 'response')
+    email_body = frappe.render_template(email_body, {"due_diligence_secure_url": f"""{doctype}: {frappe.utils.get_url()+f"/proposal?quotation={urllib.parse.quote(docname)}&doctype={urllib.parse.quote(doctype)}"} """})
+    
+    if(not Doc.sales_partner):
+        frappe.throw("Couldn't find Sales Partner")
+    mobile=frappe.get_value("Sales Partner", Doc.sales_partner, "mobile_no")
+
+
+    if not mobile:
+        frappe.throw('Kindly enter Mobile no for Sales Partner')
+    
+    whatsapp(number = mobile,
+    message=[email_body],
+    media_type="None")
+
+    url = frappe.utils.get_url()
+    return [url, newDocName]
+
 def create_due_diligence(send_to, email_template, contact_person, quotation, source_doctype):
     
     url = frappe.utils.get_url()
@@ -117,3 +145,13 @@ def check_file_private_or_not(quotation_name, source_doctype="Quotation"):
     get_file_id = frappe.db.get_value("File",{"attached_to_doctype": source_doctype, "attached_to_name": quotation_name}, ["name"]) 
     file = frappe.get_doc("File", get_file_id)
     return file.is_private
+
+def due_diligence_schedule():
+    doc=frappe.get_all("Due Diligence",pluck="document_name")
+    so=frappe.get_all("Sales Order",filters={
+        "name": ["not in", doc ],
+        "creation": ["<", frappe.utils.nowdate()]
+        },fields=["name", "sales_partner"])
+    for i in so:
+        send_whatsapp_due_diligence(i["sales_partner"], "Due Email", "Sales Order", i["name"])
+

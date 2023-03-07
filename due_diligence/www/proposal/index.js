@@ -114,10 +114,10 @@ function validateForm() {
         return false;
     }
 
-    if (accept_by.trim() == '') {
-        alert('Please fill name');
-        return false;
-    }
+    // if (accept_by.trim() == '') {
+    //     alert('Please fill name');
+    //     return false;
+    // }
 
     update_due_diligence_on_acceptance();
 }
@@ -126,6 +126,7 @@ function redirect() {
     const queryString = window.location.search;
     const split_string = queryString.split("=");
     const quotation_name = split_string[1]
+
 
     let url = frappe.call({
         method: "due_diligence.www.proposal.index.get_url",

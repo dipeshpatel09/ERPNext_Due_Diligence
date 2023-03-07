@@ -17,10 +17,9 @@ no_cache = 1
 @frappe.whitelist(allow_guest = True)
 def get_content(doctype, name, format=None):
     due_diligence = frappe.db.get_all("Due Diligence", filters={'document_type': doctype, 'document_name': name, 'diligence_status':'Sent'}, fields=['name'])
-    diligence = frappe.db.get_all("Due Diligence", filters={'document_type': doctype, 'document_name': name, 'diligence_status':'Sent'}, as_list=1)
-    # return {}
-    diligence = diligence[2:23]
-    diligence_name = frappe.get_doc("Due Diligence", diligence)
+    if(not due_diligence):
+        return {'status': False, 'getURL': frappe.utils.get_url(), 'Msg': 'Due Dellignence not found' }
+    diligence_name = frappe.get_doc("Due Diligence", due_diligence[0]["name"])
     url_expiry_date = diligence_name.url_expiry_date
     current_date = getdate()
     diligence_status = diligence_name.diligence_status
@@ -104,6 +103,7 @@ def update_due_diligence(doctype, name, accept_or_decline_by, action, reason):
             due_diligence_doc.decline_date = datetime.now()
             due_diligence_doc.diligence_status = "Declined"
             due_diligence_doc.decline_reason = reason
+        due_diligence_doc.flags.ignore_permissions=True
         due_diligence_doc.save()
     return True
     
