@@ -148,9 +148,9 @@ def check_file_private_or_not(quotation_name, source_doctype="Quotation"):
 
 def due_diligence_schedule():
     doc=frappe.get_all("Due Diligence",pluck="document_name")
-    so=frappe.get_all("Sales Order",filters={
+    so=frappe.get_all("Sales Order",filters={"workflow_state":"Order",
         "name": ["not in", doc ],
-        "creation": ["<", frappe.utils.nowdate()]
+        "creation": ["<", frappe.utils.add_to_date(frappe.utils.nowdate(),days=-3)]
         },fields=["name", "sales_partner"])
     for i in so:
         send_whatsapp_due_diligence(i["sales_partner"], "Due Email", "Sales Order", i["name"])

@@ -99,6 +99,8 @@ def update_due_diligence(doctype, name, accept_or_decline_by, action, reason):
             due_diligence_doc.accepted_date = datetime.now()
             due_diligence_doc.accepted_name = accept_or_decline_by
             due_diligence_doc.diligence_status = "Accepted Digitally"
+            if  frappe.db.get_value(due_diligence_doc.document_type,due_diligence_doc.document_name,"workflow_state")=="Order":
+                frappe.db.set_value(due_diligence_doc.document_type,due_diligence_doc.document_name,"workflow_state", 'Dispatch')
         elif(action == 'decline'):
             due_diligence_doc.decline_date = datetime.now()
             due_diligence_doc.diligence_status = "Declined"
