@@ -10,56 +10,76 @@ async function initialize_quote_content() {
 async function get_quote_content() {
     // Using await through this file instead of then.
     const queryString = window.location.search;
+    var doctype = "Quotation";
+    var docname = "";
+    window.location.search.split("?")[1].split("&").forEach(str => {
+        if (str.split("=")[0] == "doctype") {
+            doctype = decodeURIComponent(str.split("=")[1])
+        }
+        if (str.split("=")[0] == "quotation") {
+            docname = decodeURIComponent(str.split("=")[1])
+        }
+    })
     const split_string = queryString.split("=");
     window.quotation = (await frappe.call({
         method: 'due_diligence.www.proposal.index.get_content',
         args: {
-            "doctype": "Quotation",
-            "name": split_string[1],
+            "doctype": doctype,
+            "name": docname,
         },
-        callback: function(response){
-            if(response.message.status == false && response.message.diligence_status == 'Sent'){
-                window.location.href = response.message.getURL+'/proposal/expire.html';
+        callback: function (response) {
+            if (response.message.status == false && response.message.diligence_status == 'Sent') {
+                window.location.href = response.message.getURL + '/proposal/expire.html';
             } else {
-                if(response.message.status == true){
+                if (response.message.status == true) {
                     $(document).find('#viewPDF').attr('src', response.message.getURL + '#toolbar=0');
                 } else {
-                    window.location.href = response.message.getURL+'/proposal/404';
+                    window.location.href = response.message.getURL + '/proposal/404';
                 }
             }
         }
-        
+
     })).message;
     return false;
 }
 
-function update_due_diligence_on_acceptance(){
-    
+function update_due_diligence_on_acceptance() {
+
     const queryString = window.location.search;
     const split_string = queryString.split("=");
+    var doctype = "Quotation";
+    var docname = "";
+    window.location.search.split("?")[1].split("&").forEach(str => {
+        if (str.split("=")[0] == "doctype") {
+            doctype = decodeURIComponent(str.split("=")[1])
+        }
+        if (str.split("=")[0] == "quotation") {
+            docname = decodeURIComponent(str.split("=")[1])
+        }
+    })
     const quotation_name = split_string[1]
 
     var getAcceptedName = document.getElementById('accept_or_decline_by').value;
-    
+
     let send_email_on_acceptance = frappe.call({
         method: "due_diligence.www.proposal.index.send_mail_on_acceptance_or_decline",
         args: {
-            "doctype": "Quotation",
-            "name": quotation_name,
+            "doctype": doctype,
+            "name": docname,
             "accept_or_decline_by": getAcceptedName,
             "action": "accept",
-            "reason":''
+            "reason": ''
         },
-        callback: function(response){
+        callback: function (response) {
             if (response.message.status) {
-                window.location.href = response.message.redirectURL+'/proposal/success';
+                window.location.href = response.message.redirectURL + '/proposal/success';
             }
         }
     }).message;
     return send_email_on_acceptance
 }
 
-function update_due_diligence_on_decline(){
+function update_due_diligence_on_decline() {
     const queryString = window.location.search;
     const split_string = queryString.split("=");
     const quotation_name = split_string[1]
@@ -76,9 +96,9 @@ function update_due_diligence_on_decline(){
             "action": "decline",
             "reason": reason
         },
-        callback: function(response){
+        callback: function (response) {
             if (response.message.status) {
-                window.location.href = response.message.redirectURL+'/proposal/decline';
+                window.location.href = response.message.redirectURL + '/proposal/decline';
             }
         }
     }).message;
@@ -89,33 +109,34 @@ function validateForm() {
 
     let checkbox = document.getElementById('acceptance');
     let accept_by = document.getElementById('accept_or_decline_by').value;
-    if(checkbox.checked == false) {
+    if (checkbox.checked == false) {
         alert('Please fill checkbox');
         return false;
-    } 
-    
-    if(accept_by.trim() == ''){
-        alert('Please fill name');
-        return false;
     }
+
+    // if (accept_by.trim() == '') {
+    //     alert('Please fill name');
+    //     return false;
+    // }
 
     update_due_diligence_on_acceptance();
 }
 
-function redirect(){
+function redirect() {
     const queryString = window.location.search;
     const split_string = queryString.split("=");
     const quotation_name = split_string[1]
 
+
     let url = frappe.call({
         method: "due_diligence.www.proposal.index.get_url",
-        args:{
+        args: {
             "doctype": "Quotation",
             "name": quotation_name,
             "accept_or_decline_by": '',
         },
-        callback: function(response){
-            window.location.href = response.message[0]+'/proposal/reason'+'?quotation='+response.message[2];
+        callback: function (response) {
+            window.location.href = response.message[0] + '/proposal/reason' + '?quotation=' + response.message[2];
         }
     }).message;
     return url;

@@ -1,4 +1,4 @@
-frappe.ui.form.on('Quotation', {
+frappe.ui.form.on('Sales Order', {
     refresh: function (frm) {
         if (frm.doc.docstatus == 1) {
             cur_frm.add_custom_button(__('Send Due Diligence'), function () {
@@ -8,11 +8,16 @@ frappe.ui.form.on('Quotation', {
     },
 
 
-    customValidation: function (frm) {
-        if (cur_frm.doc.contact_email == '' || cur_frm.doc.contact_email == undefined) {
-            frappe.throw(__('Kindly select the contact.'));
-            return false;
+    customValidation: async function (frm) {
+        if(! frm.doc.sales_partner){
+            frappe.throw("Couldn't find Sales Partner")
         }
+        let mobileno=frappe.db.get_value("Sales Partner", frm.doc.sales_partner, "mobile_no")
+
+
+    if (!mobileno){
+        frappe.throw('Kindly enter Mobile no for Sales Partner')
+    }
         else {
             /* check Due Diligence Settings for email template */
             frappe.call({
@@ -33,6 +38,8 @@ frappe.ui.form.on('Quotation', {
     },
 
     due_diligence: function (frm) {
+        send_whatsapp_message(frm)
+        return
         let dialog = new frappe.ui.Dialog({
             title: __("Send Due Diligence"),
             fields: [
@@ -164,9 +171,122 @@ frappe.ui.form.on('Quotation', {
     },
 });
 
+function send_whatsapp_message(frm) {
+    let dialog = new frappe.ui.Dialog({
+        title: __("Send Due Diligence"),
+        fields: [
+            {
+                label: __('Person'),
+                fieldtype: 'Data',
+                fieldname: 'contact_person',
+                reqd: 1,
+                // options: frm.doc.contact_display,
+            },
 
+            {
+                label: __('Message Template'),
+                fieldtype: 'Link',
+                fieldname: 'email_template',
+                options: 'Email Template',
+                req: 1,
+                onchange: function (e) {
+                    if (this.value != '') {
+                        frappe.call({
+                            method: "due_diligence.due_diligence.doctype.due_diligence.due_diligence.get_email_template_details",
+                            args: {
+                                "doctype": "Email Template",
+                                "name": this.value,
+                                "quotationName": frm.doc.name,
+                                "source_doctype": frm.doc.doctype
+                            },
+                            callback: function (response) {
+                                dialog.set_value("email_subject", response.message[0]);
+                                dialog.set_value("email_body", response.message[1]);
+                            }
+                        });
+                    }
+                }
+            },
+            {
+                fieldtype: 'Column Break',
+                fieldname: 'col_break_1',
+            },
+            {
+                fieldtype: 'Section Break',
+                fieldname: 'sec_break_1',
+            },
+            {
+                label: __('Subject'),
+                fieldtype: 'Data',
+                fieldname: 'email_subject',
+                req: 1,
+            },
 
-frappe.ui.form.on("Quotation", {
+            {
+                label: __("Message Body"),
+                fieldtype: 'Text Editor',
+                fieldname: 'email_body',
+                req: 1
+            },
+            {
+                fieldtype: 'Section Break',
+                fieldname: 'sec_break_1',
+            },
+            // {
+            // 	fieldtype: 'Column Break',
+            // 	fieldname: 'col_break_5',
+            // },
+            {
+                label: __('Send Message'),
+                fieldtype: 'Button',
+                fieldname: 'send_email',
+                click: function () {
+                    frappe.call({
+                        method: "due_diligence.due_diligence.doctype.due_diligence.due_diligence.send_whatsapp_due_diligence",
+                        args: {
+                            "sales_partner": frm.doc.sales_partner,
+                            "email_template": dialog.get_value("email_template"),
+                            "docname": frm.doc.name,
+                            "doctype": frm.doc.doctype
+                        },
+                        callback: function (response) {
+                            // console.log(frappe.local.request_ip);
+                            console.log(response.message);
+                            if (response.message) {
+                                frappe.show_alert({message: "Messgae Successfully queued for sending", indicator: "green"})
+                                // location.href = response.message[0] + "/app/due-diligence/" + response.message[1];
+                            }
+                        }
+                    });
+                    dialog.hide();
+                }
+            },
+            {
+                fieldtype: 'Column Break',
+                fieldname: 'col_break_5',
+            },
+            {
+                label: __("Cancel"),
+                fieldtype: "Button",
+                fieldname: "cancel",
+                click: function () {
+                    dialog.hide();
+                }
+            }
+        ]
+    });
+    dialog.set_value("contact_person", frm.doc.contact_display);
+    dialog.set_value("send_to", frm.doc.contact_email);
+    dialog.show();
+    dialog.$wrapper.find('.modal-dialog').css({ "max-width": "1000px" });
+    dialog.$wrapper.find('.modal-content').css({ "width": "1000px" });
+    dialog.$wrapper.find('.ql-editor').css({ "min-height": "150px" });
+    dialog.$wrapper.find('button[data-fieldname=send_email]').css({ 'background-color': '#2490ef', 'float': 'left', 'color': '#ffffff' });
+    dialog.$wrapper.find('button[data-fieldname=cancel]').css({ 'background-color': 'red', 'float': 'right', 'color': '#ffffff' });
+
+}
+
+frappe.ui.form.on("Sales Order", {
     onload: function (frm) {
         var fileName = frm.doc.name + '.pdf';
         $('a[title="' + fileName + '"]').removeAttr('href', 'javascript://');

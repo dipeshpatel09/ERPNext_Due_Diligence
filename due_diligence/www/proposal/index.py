@@ -16,10 +16,10 @@ no_cache = 1
 
 @frappe.whitelist(allow_guest = True)
 def get_content(doctype, name, format=None):
-    due_diligence = frappe.db.get_list("Due Diligence", filters={'quotation': name, 'diligence_status':'Sent'}, fields=['name'])
-    diligence = frappe.db.get_all("Due Diligence", filters={'quotation': name, 'diligence_status':'Sent'}, as_list=1)
-    diligence = diligence[2:23]
-    diligence_name = frappe.get_doc("Due Diligence", diligence)
+    due_diligence = frappe.db.get_all("Due Diligence", filters={'document_type': doctype, 'document_name': name, 'diligence_status':'Sent'}, fields=['name'])
+    if(not due_diligence):
+        return {'status': False, 'getURL': frappe.utils.get_url(), 'Msg': 'Due Dellignence not found' }
+    diligence_name = frappe.get_doc("Due Diligence", due_diligence[0]["name"])
     url_expiry_date = diligence_name.url_expiry_date
     current_date = getdate()
     diligence_status = diligence_name.diligence_status
@@ -28,20 +28,19 @@ def get_content(doctype, name, format=None):
     else:
         if due_diligence:
             file_name = name+".pdf"
-            get_file_id = frappe.db.get_value("File",{"file_name": file_name}, ["name"])
+            get_file_id = frappe.db.get_value("File",{"attached_to_doctype": doctype, "attached_to_name": name}, ["name"])
             file = frappe.get_doc("File", get_file_id)
             
             getFileURL = frappe.utils.get_url() + file.file_url
             return {'status': True, 'getURL': getFileURL}
         else:
             return {'status': False, 'getURL': frappe.utils.get_url(), 'diligence_status': diligence_status}
-
    
 @frappe.whitelist(allow_guest = True)
 def send_mail_on_acceptance_or_decline(doctype, name, accept_or_decline_by, action, reason):
     
     file_name = name+".pdf"
-    get_file_id = frappe.db.get_value("File",{"file_name": file_name}, ["name"])
+    get_file_id = frappe.db.get_value("File",{"attached_to_doctype": doctype, "attached_to_name": name}, ["name"])
     file = frappe.get_doc("File", get_file_id)
     file_path = get_file_path(file.file_url)
     with open(encode(file_path), "rb") as fileobj:
@@ -52,7 +51,7 @@ def send_mail_on_acceptance_or_decline(doctype, name, accept_or_decline_by, acti
     	}
     redirect_url = frappe.utils.get_url()
     
-    quotationDoc = frappe.get_doc("Quotation", name)
+    quotationDoc = frappe.get_doc(doctype, name)
     docAsDict = quotationDoc.as_dict()
     
 
@@ -70,7 +69,7 @@ def send_mail_on_acceptance_or_decline(doctype, name, accept_or_decline_by, acti
         email_template = frappe.db.get_single_value("Due Diligence Settings", "decline_email_template")
         email_subject, email_body = frappe.db.get_value("Email Template", email_template, ["subject", "response"])
         email_body = frappe.render_template(email_body, docAsDict)
-        recipients =  frappe.db.get_value("Due Diligence", {'quotation': name},["sender_email"])
+        recipients =  frappe.db.get_value("Due Diligence", {'document_type': doctype, 'document_name': name},["sender_email"])
         attachments = "[]"
         email_cc = None
         
@@ -100,10 +99,13 @@ def update_due_diligence(doctype, name, accept_or_decline_by, action, reason):
             due_diligence_doc.accepted_date = datetime.now()
             due_diligence_doc.accepted_name = accept_or_decline_by
             due_diligence_doc.diligence_status = "Accepted Digitally"
+            if  frappe.db.get_value(due_diligence_doc.document_type,due_diligence_doc.document_name,"workflow_state")=="Order":
+                frappe.db.set_value(due_diligence_doc.document_type,due_diligence_doc.document_name,"workflow_state", 'Dispatch')
         elif(action == 'decline'):
             due_diligence_doc.decline_date = datetime.now()
             due_diligence_doc.diligence_status = "Declined"
             due_diligence_doc.decline_reason = reason
+        due_diligence_doc.flags.ignore_permissions=True
         due_diligence_doc.save()
     return True
     

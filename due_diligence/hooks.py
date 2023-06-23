@@ -34,7 +34,10 @@ fixtures = ["Custom Field"]
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-doctype_js = {"Quotation" : "public/js/doctype_js/custom_quotation.js"}
+doctype_js = {
+	"Quotation" : "public/js/doctype_js/custom_quotation.js",
+	"Sales Order" : "public/js/doctype_js/custom_salesorder.js"
+	}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -110,23 +113,23 @@ doc_events = {
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-# 	"all": [
-# 		"due_diligence.tasks.all"
-# 	],
-# 	"daily": [
-# 		"due_diligence.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"due_diligence.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"due_diligence.tasks.weekly"
-# 	]
-# 	"monthly": [
-# 		"due_diligence.tasks.monthly"
-# 	]
-# }
+scheduler_events = {
+	# "all": [
+	# 	"due_diligence.tasks.all"
+	# ],
+	"daily": [
+		"due_diligence.due_diligence.doctype.due_diligence.due_diligence.due_diligence_schedule"
+	],
+	# "hourly": [
+	# 	"due_diligence.tasks.hourly"
+	# ],
+	# "weekly": [
+	# 	"due_diligence.tasks.weekly"
+	# ]
+	# "monthly": [
+	# 	"due_diligence.tasks.monthly"
+	# ]
+}
 
 # Testing
 # -------
