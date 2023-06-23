@@ -10,7 +10,7 @@ from datetime import datetime
 import requests
 from frappe.utils import add_to_date
 from datetime import timedelta, date
-from oxo.oxo.doctype.ts_whatsapp_settings.ts_whatsapp_settings import whatsapp
+from oxo.oxo.doctype.ts_whatsapp_settings.ts_whatsapp_settings import whatsapp_due
 import urllib.parse
 
 class DueDiligence(Document):
@@ -63,18 +63,14 @@ def send_whatsapp_due_diligence(sales_partner, email_template, doctype, docname)
     email_subject = frappe.db.get_value('Email Template', email_template, 'subject')
     email_body = frappe.db.get_value('Email Template', email_template, 'response')
     email_body = frappe.render_template(email_body, {"due_diligence_secure_url": f"""{doctype}: {frappe.utils.get_url()+f"/proposal?quotation={urllib.parse.quote(docname)}&doctype={urllib.parse.quote(doctype)}"} """})
-    
+    msg_url = frappe.utils.get_url()+f"/proposal?quotation={urllib.parse.quote(docname)}&doctype={urllib.parse.quote(doctype)}"
+    ph_id = frappe.db.get_single_value("TS Whatsapp Settings", "phone_id")
     if(not Doc.sales_partner):
         frappe.throw("Couldn't find Sales Partner")
-    mobile=frappe.get_value("Sales Partner", Doc.sales_partner, "mobile_no")
-
-
-    if not mobile:
+    number=frappe.get_value("Sales Partner", Doc.sales_partner, "mobile_no")    
+    if not number:
         frappe.throw('Kindly enter Mobile no for Sales Partner')
-    
-    whatsapp(number = mobile,
-    message=[email_body],
-    media_type="None")
+    whatsapp_due(ph_id,number,msg_url)
 
     url = frappe.utils.get_url()
     return [url, newDocName]

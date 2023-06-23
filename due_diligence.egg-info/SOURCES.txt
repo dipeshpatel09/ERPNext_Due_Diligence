@@ -35,9 +35,13 @@ due_diligence/due_diligence/doctype/due_diligence_settings/due_diligence_setting
 due_diligence/due_diligence/doctype/due_diligence_settings/test_due_diligence_settings.py
 due_diligence/fixtures/custom_field.json
 due_diligence/public/js/doctype_js/custom_quotation.js
+due_diligence/public/js/doctype_js/custom_salesorder.js
 due_diligence/templates/__init__.py
 due_diligence/templates/pages/__init__.py
+due_diligence/www/__init__.py
+due_diligence/www/__pycache__/__init__.py
 due_diligence/www/proposal/404.html
+due_diligence/www/proposal/__init__.py
 due_diligence/www/proposal/decline.html
 due_diligence/www/proposal/expire.html
 due_diligence/www/proposal/index.html
@@ -45,3 +49,4 @@ due_diligence/www/proposal/index.js
 due_diligence/www/proposal/index.py
 due_diligence/www/proposal/reason.html
 due_diligence/www/proposal/success.html
+due_diligence/www/proposal/__pycache__/__init__.py
